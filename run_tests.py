@@ -1,13 +1,14 @@
 import unittest
 import coverage
 
-from unit_tests import TestComplexNum 
-from rational import RationalNum
-
 cov = coverage.Coverage()
 cov.start()
 
-unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestComplexNum))
+if __name__ == '__main__':
+    loader = unittest.TestLoader()
+    suite = loader.discover(start_dir='.', pattern='unit_tests.py')  # 
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
 
 cov.stop()
 cov.save()

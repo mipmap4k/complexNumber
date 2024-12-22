@@ -1,5 +1,5 @@
 from rational import RationalNum
-from math import sqrt, atan
+from math import sqrt, atan, cos, sin, exp
 
 class ComplexNum:
     """Класс для представления комплексных чисел"""
@@ -15,7 +15,9 @@ class ComplexNum:
     @real.setter
     def real(self, value):
         """Сеттер для действительной части"""
-        self._real = RationalNum(value) if isinstance(value, (int, float)) else value
+        if not isinstance(value, (int, float)):
+            raise TypeError("Атата, так нельзя, действительная часть должна быть числом (int или float).")
+        self._real = RationalNum(value)
 
     @property
     def imaginary(self):
@@ -25,7 +27,9 @@ class ComplexNum:
     @imaginary.setter
     def imaginary(self, value):
         """Сеттер для мнимой части"""
-        self._imaginary = RationalNum(value) if isinstance(value, (int, float)) else value
+        if not isinstance(value, (int, float)):
+            raise TypeError("Атата, так нельзя, мнимая часть должна быть числом (int или float).")
+        self._imaginary = RationalNum(value)
 
     def __add__(self, other):
         """Перегрузка оператора сложения"""
@@ -62,11 +66,10 @@ class ComplexNum:
         new_real = self.real * other.real - self.imaginary * other.imaginary
         new_imaginary = self.real * other.imaginary + self.imaginary * other.real
         return ComplexNum(new_real, new_imaginary)
-
     def __rmul__(self, other):
         """Перегрузка оператора умножения с целым или вещественным числом"""
         if isinstance(other, (int, float)):
-            return ComplexNum(self.real * RationalNum(other), self.imaginary * RationalNum(other))
+            return self * other  # Используем уже реализованный метод mul
         return NotImplemented
 
     def __truediv__(self, other):
@@ -118,9 +121,21 @@ class ComplexNum:
         return sqrt((self.real.to_float()) ** 2 + (self.imaginary.to_float()) ** 2)
 
     def arg(self):
-      """Аргумент комплексного числа"""
-      real = self.real.to_float()
-      imag = self.imaginary.to_float()
-      if real == 0 and imag == 0:
+        """Аргумент комплексного числа"""
+        real = self.real.to_float()
+        imag = self.imaginary.to_float()
+        if real == 0 and imag == 0:
             raise ValueError("Аргумент не определен для нулевого комплексного числа")
-      return atan(imag / real)
+        return atan(imag / real)
+
+    def polar_form(self):
+        """Представление комплексного числа в полярной форме."""
+        r = self.abs()
+        theta = self.arg()
+        return f"{r} * (cos({theta}) + i * sin({theta}))"
+
+    def exponential_form(self):
+        """Представление комплексного числа в экспоненциальной форме."""
+        r = self.abs()
+        theta = self.arg()
+        return f"{r} * exp(i * {theta})"

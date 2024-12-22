@@ -66,6 +66,20 @@ class TestRationalNum(unittest.TestCase):
         with self.assertRaises(ValueError):
             RationalNum(1, 0)
 
+    # Тесты с большими значениями
+    def test_large_values(self):
+        r1 = RationalNum(123456789, 987654321)
+        r2 = RationalNum(987654321, 123456789)
+        result = r1 * r2
+        self.assertEqual(result.up, 1)
+        self.assertEqual(result.down, 1)
+
+    def test_reduction_large_values(self):
+        r = RationalNum(123456789 * 2, 123456789 * 3)
+        r.reduction()
+        self.assertEqual(r.up, 2)
+        self.assertEqual(r.down, 3)
+
 class TestComplexNum(unittest.TestCase):
 
     def test_init(self):
@@ -77,8 +91,8 @@ class TestComplexNum(unittest.TestCase):
         c = ComplexNum()
         c.real = 5
         self.assertEqual(c.real, RationalNum(5))
-        c.real = RationalNum(3, 2)
-        self.assertEqual(c.real, RationalNum(3, 2))
+        c.real = 5.8
+        self.assertEqual(c.real, RationalNum(5.8))
 
     def test_imaginary_setter(self):
         c = ComplexNum()
@@ -188,6 +202,25 @@ class TestComplexNum(unittest.TestCase):
         result = c ** 0
         self.assertEqual(result.real, RationalNum(1))
         self.assertEqual(result.imaginary, RationalNum(0))
+
+    # Тесты с большими значениями
+    def test_large_values(self):
+        c1 = ComplexNum(RationalNum(123456, 654321), RationalNum(654321, 123456))
+        c2 = 2 
+        result = c1 * c2
+        self.assertEqual(result.real.up, 82304)
+        self.assertEqual(result.real.down, 218107)
+        self.assertEqual(result.imaginary.up, 218107)
+        self.assertEqual(result.imaginary.down, 20576)
+
+    def test_reduction_large_values(self):
+        c = ComplexNum(RationalNum(123456789 * 2, 123456789 * 3), RationalNum(123456789 * 4, 123456789 * 5))
+        c.real.reduction()
+        c.imaginary.reduction()
+        self.assertEqual(c.real.up, 2)
+        self.assertEqual(c.real.down, 3)
+        self.assertEqual(c.imaginary.up, 4)
+        self.assertEqual(c.imaginary.down, 5)
 
 if __name__ == '__main__':
     unittest.main()

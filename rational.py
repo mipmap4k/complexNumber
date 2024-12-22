@@ -83,7 +83,8 @@ class RationalNum:
         result = RationalNum(self.up, self.down)
         for _ in range(n - 1):
             result *= self
-        return result.reduction()
+            result.reduction()
+        return result
 
     def __iadd__(self, other):
         return self.__add__(other)
