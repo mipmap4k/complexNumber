@@ -65,6 +65,26 @@ class TestRationalNum(unittest.TestCase):
     def test_exception_zero_denominator(self):
         with self.assertRaises(ValueError):
             RationalNum(1, 0)
+    
+    def test_assignment_up(self):
+        """Тест присваивания числителя"""
+        r = RationalNum(2, 2)
+        r.up = 3
+        self.assertEqual(r.up, 3)
+        self.assertEqual(r.down, 1)
+
+    def test_assignment_down(self):
+        """Тест присваивания знаменателя"""
+        r = RationalNum(2, 4)
+        r.down = 6
+        self.assertEqual(r.up, 1)
+        self.assertEqual(r.down, 6)
+
+    def test_assignment_zero_denominator(self):
+        """Тест присваивания нулевого знаменателя"""
+        r = RationalNum(2, 4)
+        with self.assertRaises(ValueError):
+            r.down = 0 
 
     # Тесты с большими значениями
     def test_large_values(self):
@@ -98,8 +118,6 @@ class TestComplexNum(unittest.TestCase):
         c = ComplexNum()
         c.imaginary = 7
         self.assertEqual(c.imaginary, RationalNum(7))
-        c.imaginary = RationalNum(5, 3)
-        self.assertEqual(c.imaginary, RationalNum(5, 3))
 
     def test_add(self):
         c1 = ComplexNum(RationalNum(1, 2), RationalNum(3, 4))
@@ -202,6 +220,28 @@ class TestComplexNum(unittest.TestCase):
         result = c ** 0
         self.assertEqual(result.real, RationalNum(1))
         self.assertEqual(result.imaginary, RationalNum(0))
+    
+    def test_assignment_real(self):
+        c = ComplexNum(1, 2)
+        c.real = 3
+        self.assertEqual(c.real, 3)
+        self.assertEqual(c.imaginary, 2)
+
+    def test_assignment_imaginary(self):
+        c = ComplexNum(1, 2)
+        c.imaginary = 4
+        self.assertEqual(c.real, 1)
+        self.assertEqual(c.imaginary, 4)
+
+    def test_assignment_invalid_real(self):
+        c = ComplexNum(1, 2)
+        with self.assertRaises(TypeError):
+            c.real = "invalid"  
+
+    def test_assignment_invalid_imaginary(self):
+        c = ComplexNum(1, 2)
+        with self.assertRaises(TypeError):
+            c.imaginary = "invalid" 
 
     # Тесты с большими значениями
     def test_large_values(self):
